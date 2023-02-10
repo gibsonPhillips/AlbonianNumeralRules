@@ -20,7 +20,6 @@ public class ConverterTests {
 
     @Test
     public void ArabicToElbonianSampleTest() throws MalformedNumberException, ValueOutOfBoundsException {
-        ElbonianArabicConverter converter = new ElbonianArabicConverter("I");
         assertEquals(converter.toArabic(), 1);
     }
 
@@ -34,5 +33,11 @@ public class ConverterTests {
         throw new ValueOutOfBoundsException("0");
     }
 
+
+    @Test
+    public void possibility1() throws MalformedNumberException, ValueOutOfBoundsException {
+        ElbonianArabicConverter p1 = new ElbonianArabicConverter("MMCXX");
+        assertEquals(p1, 2120);
+    }
     // TODO Add more test cases
 }
