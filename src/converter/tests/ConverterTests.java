@@ -142,6 +142,17 @@ public class ConverterTests {
         assertEquals(converter.toArabic(), -1);
     }
 
+    @Test
+    public void ArabicToElbonianSampleTest1() throws MalformedNumberException, ValueOutOfBoundsException {
+        ElbonianArabicConverter converter = new ElbonianArabicConverter("2120");
+        assertEquals(converter.toElbonian(), "MMCXX");
+    }
+
+    @Test
+    public void ArabicToElbonianSampleTest2() throws MalformedNumberException, ValueOutOfBoundsException {
+        ElbonianArabicConverter converter = new ElbonianArabicConverter("312");
+        assertEquals(converter.toElbonian(), "CCCXII");
+    }
 
     // TODO Add more test cases
 }

@@ -3,6 +3,7 @@ package converter;
 import converter.exceptions.MalformedNumberException;
 import converter.exceptions.ValueOutOfBoundsException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 /**
@@ -17,7 +18,7 @@ public class ElbonianArabicConverter {
     private final String number;
 
     // hardcode the values of Elbonian numbers
-    private static HashMap<Character, Integer> ElbowMap = new HashMap<>();
+    private static final HashMap<Character, Integer> ElbowMap = new HashMap<>();
 
     static {
         ElbowMap.put('I', 1);
@@ -35,21 +36,21 @@ public class ElbonianArabicConverter {
     }
 
 
-    private static HashMap<Integer, String> ArabMap = new HashMap<>();
+    private static final LinkedHashMap<Integer, String> ArabMap = new LinkedHashMap<>();
 
     static {
-        ArabMap.put(1, "I");
-        ArabMap.put(10, "X");
-        ArabMap.put(100, "C");
-        ArabMap.put(1000, "M");
-        ArabMap.put(5, "V");
-        ArabMap.put(50, "L");
-        ArabMap.put(500, "D");
         ArabMap.put(5000, "N");
-        ArabMap.put(4, "v");
-        ArabMap.put(40, "l");
-        ArabMap.put(400, "d");
         ArabMap.put(4000, "n");
+        ArabMap.put(1000, "M");
+        ArabMap.put(500, "D");
+        ArabMap.put(400, "d");
+        ArabMap.put(100, "C");
+        ArabMap.put(50, "L");
+        ArabMap.put(40, "l");
+        ArabMap.put(10, "X");
+        ArabMap.put(5, "V");
+        ArabMap.put(4, "v");
+        ArabMap.put(1, "I");
     }
 
 
@@ -68,7 +69,6 @@ public class ElbonianArabicConverter {
 	 * Leading and trailing spaces should not throw an error.
      */
     public ElbonianArabicConverter(String number) throws MalformedNumberException, ValueOutOfBoundsException {
-
         // TODO check to see if the number is valid, then set it equal to the string
         this.number = number;
     }
