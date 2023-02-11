@@ -131,12 +131,16 @@ public class ConverterTests {
         assertEquals(converter.toArabic(), 2120);
     }
 
+    public void whitespaceBeforeAndAfter() throws MalformedNumberException, ValueOutOfBoundsException {
+        ElbonianArabicConverter converter = new ElbonianArabicConverter("       MMCXX     ");
+        assertEquals(converter.toArabic(), 2120);
+    }
+
     @Test
     public void whitespaceInTheMiddle() throws MalformedNumberException, ValueOutOfBoundsException {
         ElbonianArabicConverter converter = new ElbonianArabicConverter("CC CXII");
         assertEquals(converter.toArabic(), -1);
     }
-
 
 
     // TODO Add more test cases

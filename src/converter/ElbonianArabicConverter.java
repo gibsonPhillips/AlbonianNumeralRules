@@ -17,21 +17,39 @@ public class ElbonianArabicConverter {
     private final String number;
 
     // hardcode the values of Elbonian numbers
-    private static HashMap<Character, Integer> map = new HashMap<>();
+    private static HashMap<Character, Integer> ElbowMap = new HashMap<>();
 
     static {
-        map.put('I', 1);
-        map.put('X', 10);
-        map.put('C', 100);
-        map.put('M', 1000);
-        map.put('V', 5);
-        map.put('L', 50);
-        map.put('D', 500);
-        map.put('N', 5000);
-        map.put('v', 4);
-        map.put('l', 40);
-        map.put('d', 400);
-        map.put('n', 4000);
+        ElbowMap.put('I', 1);
+        ElbowMap.put('X', 10);
+        ElbowMap.put('C', 100);
+        ElbowMap.put('M', 1000);
+        ElbowMap.put('V', 5);
+        ElbowMap.put('L', 50);
+        ElbowMap.put('D', 500);
+        ElbowMap.put('N', 5000);
+        ElbowMap.put('v', 4);
+        ElbowMap.put('l', 40);
+        ElbowMap.put('d', 400);
+        ElbowMap.put('n', 4000);
+    }
+
+
+    private static HashMap<Integer, String> ArabMap = new HashMap<>();
+
+    static {
+        ArabMap.put(1, "I");
+        ArabMap.put(10, "X");
+        ArabMap.put(100, "C");
+        ArabMap.put(1000, "M");
+        ArabMap.put(5, "V");
+        ArabMap.put(50, "L");
+        ArabMap.put(500, "D");
+        ArabMap.put(5000, "N");
+        ArabMap.put(4, "v");
+        ArabMap.put(40, "l");
+        ArabMap.put(400, "d");
+        ArabMap.put(4000, "n");
     }
 
 
@@ -62,12 +80,12 @@ public class ElbonianArabicConverter {
      *
      * @return An arabic value
      */
-    public int toArabic() throws MalformedNumberException {
+    public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException {
             int arabic = 0;
             int prev = 0;
 
             for (int i = this.number.length() - 1; i >= 0; i--) {
-                int current = map.get(this.number.charAt(i));
+                int current = ElbowMap.get(this.number.charAt(i));
 
                 if (current < prev) {
                     System.out.println("current: " + current + "Prev: " + prev);
@@ -88,22 +106,24 @@ public class ElbonianArabicConverter {
      *
      * @return An Elbonian value
      */
-    public String toElbonian() {
-        int arabic = this.number;
-        if (arabic <= 0 || arabic >= 4000) {
-            return "Invalid number";
+    public String toElbonian() throws MalformedNumberException, ValueOutOfBoundsException {
+        int arabic = Integer.parseInt(this.number);
+
+        if (arabic <= 0 || arabic >= 10000) {
+            throw new ValueOutOfBoundsException("The arabic number (" + arabic + ") isn't in the acceptable range of 1 to 9999");
         }
 
-        String roman = "";
+        String Elbow = "";
 
-        for (int i : map.keySet()) {
+        for (int i : ArabMap.keySet()) {
             while (arabic >= i) {
-                roman += map.get(i);
+                System.out.println(arabic + " - " + ArabMap.get(i) + " - " + i);
+                Elbow += ArabMap.get(i);
                 arabic -= i;
             }
         }
 
-        return roman;        return "I";
+        return Elbow;
     }
 
 }
