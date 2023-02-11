@@ -4,6 +4,7 @@ import converter.exceptions.MalformedNumberException;
 import converter.exceptions.ValueOutOfBoundsException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.regex.Pattern;
 
 import static jdk.nashorn.internal.runtime.GlobalFunctions.parseInt;
 
@@ -74,17 +75,23 @@ public class ElbonianArabicConverter {
 
         this.number = number.trim();
 
-        // TODO if numbers in this.number
-        if (false) {
-        throw new MalformedNumberException("Whitespace in the middle of argument");
-        }
+        Pattern anyNonLetters = Pattern.compile("[^a-zA-z]");
+
+
+        // TODO if nonnumbers in this.number
+
 
 
         try {
             int intNumber = Integer.parseInt(this.number);
+            if (intNumber < 1 || intNumber > 9999) {
+                throw new ValueOutOfBoundsException("Number is out of bounds");
+            }
 
         } catch (Exception e){
-
+            if (anyNonLetters.matcher(this.number).find()) {
+                throw new MalformedNumberException("Whitespace in the middle of argument");
+            }
         }
     }
 

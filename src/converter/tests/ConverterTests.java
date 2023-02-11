@@ -18,11 +18,6 @@ public class ConverterTests {
         assertEquals(converter.toElbonian(), "I");
     }
 
-    @Test
-    public void ArabicToElbonianSampleTest() throws MalformedNumberException, ValueOutOfBoundsException {
-        ElbonianArabicConverter converter = new ElbonianArabicConverter("1");
-        assertEquals(converter.toArabic(), 40);
-    }
 
     @Test(expected = MalformedNumberException.class)
     public void malformedNumberTest() throws MalformedNumberException, ValueOutOfBoundsException {
@@ -131,15 +126,15 @@ public class ConverterTests {
         assertEquals(converter.toArabic(), 2120);
     }
 
+    @Test
     public void whitespaceBeforeAndAfter() throws MalformedNumberException, ValueOutOfBoundsException {
         ElbonianArabicConverter converter = new ElbonianArabicConverter("       MMCXX     ");
         assertEquals(converter.toArabic(), 2120);
     }
 
-    @Test
+    @Test(expected = MalformedNumberException.class)
     public void whitespaceInTheMiddle() throws MalformedNumberException, ValueOutOfBoundsException {
         ElbonianArabicConverter converter = new ElbonianArabicConverter("CC CXII");
-        assertEquals(converter.toArabic(), -1);
     }
 
     @Test
@@ -153,6 +148,8 @@ public class ConverterTests {
         ElbonianArabicConverter converter = new ElbonianArabicConverter("312");
         assertEquals(converter.toElbonian(), "CCCXII");
     }
+
+
 
     // TODO Add more test cases
 }
