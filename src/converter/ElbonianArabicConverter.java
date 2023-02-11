@@ -34,6 +34,7 @@ public class ElbonianArabicConverter {
         this.number = number;
     }
 
+
     /**
      * Converts the number to an Arabic numeral or returns the current value as an int if it is already
      * in the Arabic form.
