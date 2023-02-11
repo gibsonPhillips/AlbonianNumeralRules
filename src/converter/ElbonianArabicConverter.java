@@ -2,6 +2,8 @@ package converter;
 
 import converter.exceptions.MalformedNumberException;
 import converter.exceptions.ValueOutOfBoundsException;
+import java.util.HashMap;
+
 
 /**
  * This class implements a converter that takes a string that represents a number in either the
@@ -13,6 +15,25 @@ public class ElbonianArabicConverter {
 
     // A string that holds the number (Elbonian or Arabic) you would like to convert
     private final String number;
+
+    // hardcode the values of Elbonian numbers
+    private static HashMap<Character, Integer> map = new HashMap<>();
+
+    static {
+        map.put('I', 1);
+        map.put('X', 10);
+        map.put('C', 100);
+        map.put('M', 1000);
+        map.put('V', 5);
+        map.put('L', 50);
+        map.put('D', 500);
+        map.put('N', 5000);
+        map.put('v', 4);
+        map.put('l', 40);
+        map.put('d', 400);
+        map.put('n', 4000);
+    }
+
 
     /**
      * Constructor for the ElbonianArabic class that takes a string. The string should contain a valid
@@ -41,9 +62,25 @@ public class ElbonianArabicConverter {
      *
      * @return An arabic value
      */
-    public int toArabic() {
-        // TODO Fill in the method's body
-        return 1;
+    public int toArabic() throws MalformedNumberException {
+            int arabic = 0;
+            int prev = 0;
+
+            for (int i = this.number.length() - 1; i >= 0; i--) {
+                int current = map.get(this.number.charAt(i));
+
+                if (current < prev) {
+                    System.out.println("current: " + current + "Prev: " + prev);
+                    throw new MalformedNumberException("Bigger Elbonian number after smaller Elbonian number");
+                } else {
+                    arabic += current;
+                }
+
+                prev = current;
+            }
+
+            return arabic;
+
     }
 
     /**
@@ -52,8 +89,21 @@ public class ElbonianArabicConverter {
      * @return An Elbonian value
      */
     public String toElbonian() {
-        // TODO Fill in the method's body
-        return "I";
+        int arabic = this.number;
+        if (arabic <= 0 || arabic >= 4000) {
+            return "Invalid number";
+        }
+
+        String roman = "";
+
+        for (int i : map.keySet()) {
+            while (arabic >= i) {
+                roman += map.get(i);
+                arabic -= i;
+            }
+        }
+
+        return roman;        return "I";
     }
 
 }
