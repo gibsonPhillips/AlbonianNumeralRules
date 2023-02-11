@@ -5,6 +5,8 @@ import converter.exceptions.ValueOutOfBoundsException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import static jdk.nashorn.internal.runtime.GlobalFunctions.parseInt;
+
 
 /**
  * This class implements a converter that takes a string that represents a number in either the
@@ -69,8 +71,21 @@ public class ElbonianArabicConverter {
 	 * Leading and trailing spaces should not throw an error.
      */
     public ElbonianArabicConverter(String number) throws MalformedNumberException, ValueOutOfBoundsException {
-        // TODO check to see if the number is valid, then set it equal to the string
-        this.number = number;
+
+        this.number = number.trim();
+
+        // TODO if numbers in this.number
+        if (false) {
+        throw new MalformedNumberException("Whitespace in the middle of argument");
+        }
+
+
+        try {
+            int intNumber = Integer.parseInt(this.number);
+
+        } catch (Exception e){
+
+        }
     }
 
 
