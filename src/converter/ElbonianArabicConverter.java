@@ -2,11 +2,10 @@ package converter;
 
 import converter.exceptions.MalformedNumberException;
 import converter.exceptions.ValueOutOfBoundsException;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.regex.Pattern;
-
-import static jdk.nashorn.internal.runtime.GlobalFunctions.parseInt;
 
 
 /**
@@ -75,12 +74,12 @@ public class ElbonianArabicConverter {
 
         this.number = number.trim();
 
-        Pattern anyNonLetters = Pattern.compile("[^a-zA-z]");
 
-
-        // TODO if nonnumbers in this.number
-
-
+        String whitespace = "\\s";
+        Pattern correctFormRegex = Pattern.compile(whitespace);
+        if (correctFormRegex.matcher(this.number).find()) {
+            throw new MalformedNumberException("whitespace in middle");
+        }
 
         try {
             int intNumber = Integer.parseInt(this.number);
@@ -89,9 +88,7 @@ public class ElbonianArabicConverter {
             }
 
         } catch (Exception e){
-            if (anyNonLetters.matcher(this.number).find()) {
-                throw new MalformedNumberException("Whitespace in the middle of argument");
-            }
+
         }
     }
 
@@ -103,7 +100,17 @@ public class ElbonianArabicConverter {
      * @return An arabic value
      */
     public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException {
-            int arabic = 0;
+
+        // determines if the input is valid based on conditions given
+        // String correctForm = "^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$";
+        String correctForm = "^(?!.*(n|d|l|v).*(M|C|X|I))(M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|N?n?)$\n";
+        Pattern correctFormRegex = Pattern.compile(correctForm);
+        if (correctFormRegex.matcher(this.number).find()) {
+            throw new MalformedNumberException("Bad configuration my guy, try again. ");
+        } else {
+            System.out.println("works");
+        }
+        int arabic = 0;
             int prev = 0;
 
             for (int i = this.number.length() - 1; i >= 0; i--) {
@@ -122,6 +129,8 @@ public class ElbonianArabicConverter {
             return arabic;
 
     }
+
+
 
     /**
      * Converts the number to an Elbonian numeral or returns the current value if it is already in the Elbonian form.
