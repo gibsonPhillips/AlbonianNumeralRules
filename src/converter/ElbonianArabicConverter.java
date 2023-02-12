@@ -121,6 +121,9 @@ public class ElbonianArabicConverter {
                     throw new MalformedNumberException("Bigger Elbonian number after smaller Elbonian number");
                 } else {
                     arabic += current;
+                    if (arabic >= 10000) {
+                        throw new ValueOutOfBoundsException("Number is too high");
+                    }
                 }
 
                 prev = current;
