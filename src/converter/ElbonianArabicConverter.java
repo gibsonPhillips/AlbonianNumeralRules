@@ -101,14 +101,19 @@ public class ElbonianArabicConverter {
      */
     public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException {
 
-        // determines if the input is valid based on conditions given
-        // String correctForm = "^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$";
-        String correctForm = "^(?!.*(n|d|l|v).*(M|C|X|I))(M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|N?n?)$\n";
+        // gets the regex into a string
+        String correctForm = "^(?!.*(n|d|l|v).*(M|C|X|I))(M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|N?n?)$";
+        String moreThanThree = ".*(M{4,}|C{4,}|X{4,}|I{4,}).*";
+
+        // makes a Pattern object that has regex loaded into
         Pattern correctFormRegex = Pattern.compile(correctForm);
+        Pattern moreThanThreeRegex = Pattern.compile(moreThanThree);
+
+        // each if statement is working off of the Pattern regex stuff.
         if (correctFormRegex.matcher(this.number).find()) {
             throw new MalformedNumberException("Bad configuration my guy, try again. ");
-        } else {
-            System.out.println("works");
+        } else if (moreThanThreeRegex.matcher(this.number).find()){
+            throw new MalformedNumberException("Too many of the same");
         }
         int arabic = 0;
             int prev = 0;
