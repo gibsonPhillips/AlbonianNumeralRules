@@ -19,6 +19,8 @@ public class ElbonianArabicConverter {
     // A string that holds the number (Elbonian or Arabic) you would like to convert
     private final String number;
 
+    private String stateVariableFuckYou;
+
     // hardcode the values of Elbonian numbers
     private static final HashMap<Character, Integer> ElbowMap = new HashMap<>();
 
@@ -74,21 +76,28 @@ public class ElbonianArabicConverter {
 
         this.number = number.trim();
 
-
+        // handles all whitespace issues
         String whitespace = "\\s";
         Pattern correctFormRegex = Pattern.compile(whitespace);
         if (correctFormRegex.matcher(this.number).find()) {
             throw new MalformedNumberException("whitespace in middle");
         }
 
+        // only does first block if it's an int
         try {
             int intNumber = Integer.parseInt(this.number);
             if (intNumber < 1 || intNumber > 9999) {
                 throw new ValueOutOfBoundsException("Number is out of bounds");
             }
-
+            stateVariableFuckYou = "int";
         } catch (Exception e) {
-
+            String eString = "[A-Z]*|[a-z]*";
+            Pattern eStringRegex = Pattern.compile(eString);
+            if (eStringRegex.matcher(this.number).find()) {
+                stateVariableFuckYou = "string";
+            } else {
+                throw new MalformedNumberException("Janky Input");
+            }
         }
     }
 
@@ -100,6 +109,11 @@ public class ElbonianArabicConverter {
      * @return An arabic value
      */
     public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException {
+
+        if (stateVariableFuckYou != "string") {
+            throw new MalformedNumberException("Wrong way beep beep");
+        }
+
 
         // gets the regex into a string. Only has basic form of the letters in order and the acceptable amounts
         String correctForm = "^N{0,2}n?M{0,3}D?d?C{0,3}L?l?X{0,3}V?v?I{0,3}$";
@@ -122,7 +136,6 @@ public class ElbonianArabicConverter {
             int current = ElbowMap.get(this.number.charAt(i));
 
             if (current < prev) {
-                System.out.println("current: " + current + "Prev: " + prev);
                 throw new MalformedNumberException("Bigger Elbonian number after smaller Elbonian number");
             } else {
                 arabic += current;
@@ -145,17 +158,28 @@ public class ElbonianArabicConverter {
      * @return An Elbonian value
      */
     public String toElbonian() throws MalformedNumberException, ValueOutOfBoundsException {
-        int arabic = Integer.parseInt(this.number);
 
+        int arabic = 0;
+        try {
+            arabic = Integer.parseInt(this.number);
+        } catch (NumberFormatException e) {
+            throw new MalformedNumberException("unparsed int");
+        }
+
+        // check the bounds
         if (arabic <= 0 || arabic >= 10000) {
             throw new ValueOutOfBoundsException("The arabic number (" + arabic + ") isn't in the acceptable range of 1 to 9999");
+        }
+
+        // check if it's the wrong way.
+        if (stateVariableFuckYou != "int") {
+            throw new MalformedNumberException("Wrong way toot toot");
         }
 
         String Elbow = "";
 
         for (int i : ArabMap.keySet()) {
             while (arabic >= i) {
-                System.out.println(arabic + " - " + ArabMap.get(i) + " - " + i);
                 Elbow += ArabMap.get(i);
                 arabic -= i;
             }
