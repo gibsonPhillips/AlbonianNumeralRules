@@ -65,10 +65,10 @@ public class ElbonianArabicConverter {
      *
      * @param number A string that represents either a Elbonian or Arabic number.
      * @throws ValueOutOfBoundsException Thrown if the value is an Arabic integer that cannot be represented
-     * in the Elbonian number system.
-     * @throws MalformedNumberException Thrown if the value is an Elbonian number that does not conform
-     * to the rules of the Elbonian number system or any other error in Arabic number input.
-	 * Leading and trailing spaces should not throw an error.
+     *                                   in the Elbonian number system.
+     * @throws MalformedNumberException  Thrown if the value is an Elbonian number that does not conform
+     *                                   to the rules of the Elbonian number system or any other error in Arabic number input.
+     *                                   Leading and trailing spaces should not throw an error.
      */
     public ElbonianArabicConverter(String number) throws MalformedNumberException, ValueOutOfBoundsException {
 
@@ -87,7 +87,7 @@ public class ElbonianArabicConverter {
                 throw new ValueOutOfBoundsException("Number is out of bounds");
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -101,43 +101,42 @@ public class ElbonianArabicConverter {
      */
     public int toArabic() throws MalformedNumberException, ValueOutOfBoundsException {
 
-        // gets the regex into a string
-        String correctForm = "^(?!.*(n|d|l|v).*(M|C|X|I))(M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|N?n?)$";
-        String moreThanThree = ".*(M{4,}|C{4,}|X{4,}|I{4,}).*";
+        // gets the regex into a string. Only has basic form of the letters in order and the acceptable amounts
+        String correctForm = "^N{0,2}n?M{0,3}D?d?C{0,3}L?l?X{0,3}V?v?I{0,3}$";
 
-        // makes a Pattern object that has regex loaded into
+        // another regex to establish the correct form (ie don't do 4+1 when you can just do 5)
+        String longWay = "(nM)|(dC)|(lX)|(vI)";
+        // makes a Pattern objects that have regex loaded into
         Pattern correctFormRegex = Pattern.compile(correctForm);
-        Pattern moreThanThreeRegex = Pattern.compile(moreThanThree);
-
+        Pattern longWayRegex = Pattern.compile(longWay);
         // each if statement is working off of the Pattern regex stuff.
-        if (correctFormRegex.matcher(this.number).find()) {
+        if (!correctFormRegex.matcher(this.number).find()) {
             throw new MalformedNumberException("Bad configuration my guy, try again. ");
-        } else if (moreThanThreeRegex.matcher(this.number).find()){
-            throw new MalformedNumberException("Too many of the same");
+        } else if (longWayRegex.matcher(this.number).find()) {
+            throw new MalformedNumberException("wrong combo. don't add them up, just use bigger number");
         }
         int arabic = 0;
-            int prev = 0;
+        int prev = 0;
 
-            for (int i = this.number.length() - 1; i >= 0; i--) {
-                int current = ElbowMap.get(this.number.charAt(i));
+        for (int i = this.number.length() - 1; i >= 0; i--) {
+            int current = ElbowMap.get(this.number.charAt(i));
 
-                if (current < prev) {
-                    System.out.println("current: " + current + "Prev: " + prev);
-                    throw new MalformedNumberException("Bigger Elbonian number after smaller Elbonian number");
-                } else {
-                    arabic += current;
-                    if (arabic >= 10000) {
-                        throw new ValueOutOfBoundsException("Number is too high");
-                    }
+            if (current < prev) {
+                System.out.println("current: " + current + "Prev: " + prev);
+                throw new MalformedNumberException("Bigger Elbonian number after smaller Elbonian number");
+            } else {
+                arabic += current;
+                if (arabic >= 10000) {
+                    throw new ValueOutOfBoundsException("Number has become too high");
                 }
-
-                prev = current;
             }
 
-            return arabic;
+            prev = current;
+        }
+
+        return arabic;
 
     }
-
 
 
     /**
